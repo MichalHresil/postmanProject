@@ -1,0 +1,454 @@
+{
+	"info": {
+		"_postman_id": "8ec8842b-852a-495a-aab4-3527e44ae5f8",
+		"name": "CN_Onboarding - post testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21766239"
+	},
+	"item": [
+		{
+			"name": "Create new user",
+			"item": [
+				{
+					"name": "create new user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"test if user does not already exist\", function () {\r",
+									"    pm.expect(pm.response.code).not.eq(422);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Responce header tests\", function () {\r",
+									"\r",
+									"    //headers\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"    pm.response.to.have.header(\"Connection\");\r",
+									"    pm.response.to.have.header(\"Cache-control\");\r",
+									"    pm.response.to.have.header(\"Transfer-Encoding\");\r",
+									"    pm.response.to.have.header(\"Date\");  \r",
+									"\r",
+									"    //header values\r",
+									"    pm.response.to.be.header(\"Content-Type\", \"application/json; charset=utf-8\");  \r",
+									"    pm.response.to.be.header(\"Connection\", \"keep-alive\");  \r",
+									"    pm.response.to.be.header(\"Cache-Control\", \"max-age=0, private, must-revalidate\");  \r",
+									"    pm.response.to.be.header(\"Transfer-Encoding\", \"chunked\");  \r",
+									"});\r",
+									"\r",
+									"pm.test(\"State validation tests \", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.email).to.eql(pm.collectionVariables.get(\"email\"));\r",
+									"    pm.expect(jsonData.name).to.eql(pm.collectionVariables.get(\"name\"));\r",
+									"    pm.expect(jsonData.gender).to.eql(pm.collectionVariables.get(\"gender\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 250ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(250);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.collectionVariables.set(\"responseUserID\", pm.response.json().id);\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}?name={{name}}&email={{email}}&gender={{gender}}&status={{status}}",
+							"host": [
+								"{{URL}}"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "{{name}}"
+								},
+								{
+									"key": "email",
+									"value": "{{email}}"
+								},
+								{
+									"key": "gender",
+									"value": "{{gender}}"
+								},
+								{
+									"key": "status",
+									"value": "{{status}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Posts requests",
+			"item": [
+				{
+					"name": "Get nonexistent posts from user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 250ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(250);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Responce header tests\", function () {\r",
+									"    //headers\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"    pm.response.to.have.header(\"Connection\");\r",
+									"    pm.response.to.have.header(\"Cache-control\");\r",
+									"    pm.response.to.have.header(\"Transfer-Encoding\");\r",
+									"    pm.response.to.have.header(\"Date\");  \r",
+									"\r",
+									"    //header values\r",
+									"    pm.response.to.be.header(\"Content-Type\", \"application/json; charset=utf-8\");  \r",
+									"    pm.response.to.be.header(\"Connection\", \"keep-alive\");  \r",
+									"    pm.response.to.be.header(\"Cache-Control\", \"max-age=0, private, must-revalidate\");  \r",
+									"    pm.response.to.be.header(\"Transfer-Encoding\", \"chunked\");  \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test if returned object contains empty json\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.empty;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/{{responseUserID}}/posts",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"{{responseUserID}}",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "new post valid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Responce header tests\", function () {\r",
+									"    //headers\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"    pm.response.to.have.header(\"Connection\");\r",
+									"    pm.response.to.have.header(\"Cache-control\");\r",
+									"    pm.response.to.have.header(\"Transfer-Encoding\");\r",
+									"    pm.response.to.have.header(\"Date\");  \r",
+									"\r",
+									"    //header values\r",
+									"    pm.response.to.be.header(\"Content-Type\", \"application/json; charset=utf-8\");  \r",
+									"    pm.response.to.be.header(\"Connection\", \"keep-alive\");  \r",
+									"    pm.response.to.be.header(\"Cache-Control\", \"max-age=0, private, must-revalidate\");  \r",
+									"    pm.response.to.be.header(\"Transfer-Encoding\", \"chunked\");  \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Post has been created successfully\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.include.all.keys(\"body\",\"title\",\"user_id\");\r",
+									"    pm.expect(jsonData.title).to.eql(pm.collectionVariables.get(\"postTitle\"))\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "body",
+									"value": "ex. In quis fermentum est. Curabitur eu congue mi. Ut ac ligula a elit aliquet facilisis. Etiam ullamcorper venenatis malesuada. Praesent sed libero nec velit imperdiet cursus et at ligula. Duis vel ligula vitae nibh mollis pulvinar. ",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "{{postTitle}}",
+									"type": "text"
+								},
+								{
+									"key": "user_id",
+									"value": "{{responseUserID}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/{{responseUserID}}/posts",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"{{responseUserID}}",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "new post invalid - user_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response code should be 422\", function () {\r",
+									"    pm.expect(pm.response.code).to.eql(422);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Responce header tests\", function () {\r",
+									"    //headers\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"    pm.response.to.have.header(\"Connection\");\r",
+									"    pm.response.to.have.header(\"Cache-control\");\r",
+									"    pm.response.to.have.header(\"Transfer-Encoding\");\r",
+									"    pm.response.to.have.header(\"Date\");  \r",
+									"\r",
+									"    //header values\r",
+									"    pm.response.to.be.header(\"Content-Type\", \"application/json; charset=utf-8\");  \r",
+									"    pm.response.to.be.header(\"Connection\", \"keep-alive\");  \r",
+									"    pm.response.to.be.header(\"Cache-Control\", \"no-cache\");  \r",
+									"    pm.response.to.be.header(\"Transfer-Encoding\", \"chunked\");  \r",
+									"});\r",
+									"\r",
+									"/*pm.test(\"User does not exist\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    var testObj = {\r",
+									"        \"field\": \"user\",\r",
+									"        \"message\": \"must exist\"\r",
+									"    }\r",
+									"     var testObj1 = {\r",
+									"        \"field\": \"user_id\",\r",
+									"        \"message\": \"is not a number\"\r",
+									"    }\r",
+									"\r",
+									"\r",
+									"    console.log(typeof(jsonData[0]));\r",
+									"\r",
+									"    pm.expect(testObj).closeTo()\r",
+									"\r",
+									"    _.each(jsonData, (item)=>{\r",
+									"        \r",
+									"    });\r",
+									"\r",
+									"});*/\r",
+									"\r",
+									"pm.test(\"User does not exist\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(jsonData[0].field).to.eql(\"user\");\r",
+									"     pm.expect(jsonData[0].message).to.eql(\"must exist\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "body",
+									"value": "ex. In quis fermentum est. Curabitur eu congue mi. Ut ac ligula a elit aliquet facilisis. Etiam ullamcorper venenatis malesuada. Praesent sed libero nec velit imperdiet cursus et at ligula. Duis vel ligula vitae nibh mollis pulvinar. ",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "{{postTitle}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/someId/posts",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"someId",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Delete user",
+			"item": []
+		},
+		{
+			"name": "delete user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 250ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(250);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Responce header tests\", function () {\r",
+							"     //headers\r",
+							"    pm.response.to.have.header(\"Connection\");\r",
+							"    pm.response.to.have.header(\"Cache-control\");\r",
+							"    pm.response.to.have.header(\"Date\");  \r",
+							"\r",
+							"    //header values\r",
+							"    pm.response.to.be.header(\"Connection\", \"keep-alive\");  \r",
+							"    pm.response.to.be.header(\"Cache-Control\", \"no-cache\");   \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Test if response is empty\", function () {\r",
+							"    pm.response.to.not.be.withBody;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/{{responseUserID}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"{{responseUserID}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "6d53446d731d6c6ad164ee98d574fbbe3cfa3bc0b6ed7e70e8ea9eecfd7ba8b8",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "responseUserID",
+			"value": "null",
+			"type": "string"
+		},
+		{
+			"key": "email",
+			"value": "karl@mail.com",
+			"type": "string"
+		},
+		{
+			"key": "name",
+			"value": "Karl Jones",
+			"type": "string"
+		},
+		{
+			"key": "gender",
+			"value": "male",
+			"type": "string"
+		},
+		{
+			"key": "status",
+			"value": "active",
+			"type": "string"
+		},
+		{
+			"key": "URL",
+			"value": "https://gorest.co.in/public/v2/users",
+			"type": "string"
+		},
+		{
+			"key": "postTitle",
+			"value": "THIS IS A TEST TITLE",
+			"type": "string"
+		}
+	]
+}
