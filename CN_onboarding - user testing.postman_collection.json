@@ -1,0 +1,484 @@
+{
+	"info": {
+		"_postman_id": "a5a952b2-d469-4f2f-8f06-e3c68387c1df",
+		"name": "CN_onboarding - user testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21766239"
+	},
+	"item": [
+		{
+			"name": "Create new user",
+			"item": [
+				{
+					"name": "post new user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"test if user does not already exist\", function () {\r",
+									"    pm.expect(pm.response.code).not.eq(422);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Responce header tests\", function () {\r",
+									"\r",
+									"    //headers\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"    pm.response.to.have.header(\"Connection\");\r",
+									"    pm.response.to.have.header(\"Cache-control\");\r",
+									"    pm.response.to.have.header(\"Transfer-Encoding\");\r",
+									"    pm.response.to.have.header(\"Date\");  \r",
+									"\r",
+									"    //header values\r",
+									"    pm.response.to.be.header(\"Content-Type\", \"application/json; charset=utf-8\");  \r",
+									"    pm.response.to.be.header(\"Connection\", \"keep-alive\");  \r",
+									"    pm.response.to.be.header(\"Cache-Control\", \"max-age=0, private, must-revalidate\");  \r",
+									"    pm.response.to.be.header(\"Transfer-Encoding\", \"chunked\");  \r",
+									"});\r",
+									"\r",
+									"pm.test(\"State validation tests \", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.email).to.eql(pm.collectionVariables.get(\"email\"));\r",
+									"    pm.expect(jsonData.name).to.eql(pm.collectionVariables.get(\"name\"));\r",
+									"    pm.expect(jsonData.gender).to.eql(pm.collectionVariables.get(\"gender\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 250ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(250);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.collectionVariables.set(\"responseUserID\", pm.response.json().id);\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}?name={{name}}&email={{email}}&gender={{gender}}&status={{status}}",
+							"host": [
+								"{{URL}}"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "{{name}}"
+								},
+								{
+									"key": "email",
+									"value": "{{email}}"
+								},
+								{
+									"key": "gender",
+									"value": "{{gender}}"
+								},
+								{
+									"key": "status",
+									"value": "{{status}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get user id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Responce header tests\", function () {\r",
+									"    //headers\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"    pm.response.to.have.header(\"Connection\");\r",
+									"    pm.response.to.have.header(\"Cache-control\");\r",
+									"    pm.response.to.have.header(\"Transfer-Encoding\");\r",
+									"    pm.response.to.have.header(\"Date\");  \r",
+									"\r",
+									"    //header values\r",
+									"    pm.response.to.be.header(\"Content-Type\", \"application/json; charset=utf-8\");  \r",
+									"    pm.response.to.be.header(\"Connection\", \"keep-alive\");  \r",
+									"    pm.response.to.be.header(\"Cache-Control\", \"max-age=0, private, must-revalidate\");  \r",
+									"    pm.response.to.be.header(\"Transfer-Encoding\", \"chunked\");  \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test if user with ID exists\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an(\"object\");\r",
+									"    pm.expect(pm.response.code).not.eql(404);\r",
+									"    pm.expect(jsonData.message).to.eql(undefined);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test if correct user has been returned\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.email).to.eql(pm.collectionVariables.get(\"email\"));\r",
+									"    pm.expect(jsonData.name).to.eql(pm.collectionVariables.get(\"name\"));\r",
+									"    pm.expect(jsonData.gender).to.eql(pm.collectionVariables.get(\"gender\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 250ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(250);\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/{{responseUserID}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"{{responseUserID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Change user's name",
+			"item": [
+				{
+					"name": "change user's name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Responce header tests\", function () {\r",
+									"    //headers\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"    pm.response.to.have.header(\"Connection\");\r",
+									"    pm.response.to.have.header(\"Cache-control\");\r",
+									"    pm.response.to.have.header(\"Transfer-Encoding\");\r",
+									"    pm.response.to.have.header(\"Date\");  \r",
+									"\r",
+									"    //header values\r",
+									"    pm.response.to.be.header(\"Content-Type\", \"application/json; charset=utf-8\");  \r",
+									"    pm.response.to.be.header(\"Connection\", \"keep-alive\");  \r",
+									"    pm.response.to.be.header(\"Cache-Control\", \"max-age=0, private, must-revalidate\");  \r",
+									"    pm.response.to.be.header(\"Transfer-Encoding\", \"chunked\");  \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 250ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(250);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test if user to be edited exists\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData).not.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).not.be.eql(\"Resource not found\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test if name changed\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.name).not.eql(pm.collectionVariables.get(\"name\"));\r",
+									"    pm.expect(jsonData.name).to.eql(pm.collectionVariables.get(\"newName\"));\r",
+									"    pm.expect(jsonData.email).to.eql(pm.collectionVariables.get(\"email\"));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/{{responseUserID}}?name={{newName}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"{{responseUserID}}"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "{{newName}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "test of changed name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Responce header tests\", function () {\r",
+									"    //headers\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"    pm.response.to.have.header(\"Connection\");\r",
+									"    pm.response.to.have.header(\"Cache-control\");\r",
+									"    pm.response.to.have.header(\"Transfer-Encoding\");\r",
+									"    pm.response.to.have.header(\"Date\");  \r",
+									"\r",
+									"    //header values\r",
+									"    pm.response.to.be.header(\"Content-Type\", \"application/json; charset=utf-8\");  \r",
+									"    pm.response.to.be.header(\"Connection\", \"keep-alive\");  \r",
+									"    pm.response.to.be.header(\"Cache-Control\", \"max-age=0, private, must-revalidate\");  \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test if name changed\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.name).not.eql(pm.collectionVariables.get(\"name\"));\r",
+									"    pm.expect(jsonData.name).to.eql(pm.collectionVariables.get(\"newName\"));\r",
+									"    pm.expect(jsonData.email).to.eql(pm.collectionVariables.get(\"email\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 250ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(250);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/{{responseUserID}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"{{responseUserID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Delete user",
+			"item": [
+				{
+					"name": "delete user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 250ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(250);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Responce header tests\", function () {\r",
+									"     //headers\r",
+									"    pm.response.to.have.header(\"Connection\");\r",
+									"    pm.response.to.have.header(\"Cache-control\");\r",
+									"    pm.response.to.have.header(\"Date\");  \r",
+									"\r",
+									"    //header values\r",
+									"    pm.response.to.be.header(\"Connection\", \"keep-alive\");  \r",
+									"    pm.response.to.be.header(\"Cache-Control\", \"no-cache\");   \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test if response is empty\", function () {\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/{{responseUserID}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"{{responseUserID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "test of deleted user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404 - missing user\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Responce header tests\", function () {\r",
+									"     //headers\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"    pm.response.to.have.header(\"Connection\");\r",
+									"    pm.response.to.have.header(\"Cache-control\");\r",
+									"    pm.response.to.have.header(\"Transfer-Encoding\");\r",
+									"    pm.response.to.have.header(\"Date\");  \r",
+									"\r",
+									"    //header values\r",
+									"    pm.response.to.be.header(\"Content-Type\", \"application/json; charset=utf-8\");  \r",
+									"    pm.response.to.be.header(\"Connection\", \"keep-alive\");  \r",
+									"    pm.response.to.be.header(\"Cache-Control\", \"no-cache\");  \r",
+									"    pm.response.to.be.header(\"Transfer-Encoding\", \"chunked\");  \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 250ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(250);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test if user was not found\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"    pm.expect(jsonData.message).to.be.eql(\"Resource not found\");\r",
+									"    pm.expect(jsonData.id).to.eql(undefined);\r",
+									"    pm.expect(jsonData.email).to.eql(undefined);\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/{{responseUserID}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"{{responseUserID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "6d53446d731d6c6ad164ee98d574fbbe3cfa3bc0b6ed7e70e8ea9eecfd7ba8b8",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "responseUserID",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "email",
+			"value": "smith@worktest.org",
+			"type": "string"
+		},
+		{
+			"key": "name",
+			"value": "John Smith",
+			"type": "string"
+		},
+		{
+			"key": "gender",
+			"value": "male",
+			"type": "string"
+		},
+		{
+			"key": "status",
+			"value": "active",
+			"type": "string"
+		},
+		{
+			"key": "URL",
+			"value": "https://gorest.co.in/public/v2/users",
+			"type": "string"
+		},
+		{
+			"key": "newName",
+			"value": "John Doe",
+			"type": "string"
+		}
+	]
+}
