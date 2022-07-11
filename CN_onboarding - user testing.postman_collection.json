@@ -24,7 +24,7 @@
 									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Responce header tests\", function () {\r",
+									"pm.test(\"Response header tests\", function () {\r",
 									"\r",
 									"    //headers\r",
 									"    pm.response.to.have.header(\"Content-Type\");\r",
@@ -58,6 +58,15 @@
 									"\r",
 									"\r",
 									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
 									""
 								],
 								"type": "text/javascript"
@@ -105,7 +114,7 @@
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Responce header tests\", function () {\r",
+									"pm.test(\"Response header tests\", function () {\r",
 									"    //headers\r",
 									"    pm.response.to.have.header(\"Content-Type\");\r",
 									"    pm.response.to.have.header(\"Connection\");\r",
@@ -177,7 +186,7 @@
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Responce header tests\", function () {\r",
+									"pm.test(\"Response header tests\", function () {\r",
 									"    //headers\r",
 									"    pm.response.to.have.header(\"Content-Type\");\r",
 									"    pm.response.to.have.header(\"Connection\");\r",
@@ -244,7 +253,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Responce header tests\", function () {\r",
+									"pm.test(\"Response header tests\", function () {\r",
 									"    //headers\r",
 									"    pm.response.to.have.header(\"Content-Type\");\r",
 									"    pm.response.to.have.header(\"Connection\");\r",
@@ -316,7 +325,7 @@
 									"    pm.expect(pm.response.responseTime).to.be.below(250);\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Responce header tests\", function () {\r",
+									"pm.test(\"Response header tests\", function () {\r",
 									"     //headers\r",
 									"    pm.response.to.have.header(\"Connection\");\r",
 									"    pm.response.to.have.header(\"Cache-control\");\r",
@@ -361,7 +370,7 @@
 									"    pm.response.to.have.status(404);\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Responce header tests\", function () {\r",
+									"pm.test(\"Response header tests\", function () {\r",
 									"     //headers\r",
 									"    pm.response.to.have.header(\"Content-Type\");\r",
 									"    pm.response.to.have.header(\"Connection\");\r",

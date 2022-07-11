@@ -24,7 +24,7 @@
 									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Responce header tests\", function () {\r",
+									"pm.test(\"Response header tests\", function () {\r",
 									"\r",
 									"    //headers\r",
 									"    pm.response.to.have.header(\"Content-Type\");\r",
@@ -114,7 +114,7 @@
 									"    pm.expect(pm.response.responseTime).to.be.below(250);\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Responce header tests\", function () {\r",
+									"pm.test(\"Response header tests\", function () {\r",
 									"    //headers\r",
 									"    pm.response.to.have.header(\"Content-Type\");\r",
 									"    pm.response.to.have.header(\"Connection\");\r",
@@ -169,7 +169,7 @@
 									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Responce header tests\", function () {\r",
+									"pm.test(\"Response header tests\", function () {\r",
 									"    //headers\r",
 									"    pm.response.to.have.header(\"Content-Type\");\r",
 									"    pm.response.to.have.header(\"Connection\");\r",
@@ -247,7 +247,7 @@
 									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Responce header tests\", function () {\r",
+									"pm.test(\"Response header tests\", function () {\r",
 									"    //headers\r",
 									"    pm.response.to.have.header(\"Content-Type\");\r",
 									"    pm.response.to.have.header(\"Connection\");\r",
@@ -262,33 +262,50 @@
 									"    pm.response.to.be.header(\"Transfer-Encoding\", \"chunked\");  \r",
 									"});\r",
 									"\r",
-									"/*pm.test(\"User does not exist\", function () {\r",
+									"pm.test(\"User does not exist\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(jsonData).to.be.an(\"array\");\r",
+									"\r",
+									"    var test = false;\r",
+									"\r",
 									"    var testObj = {\r",
 									"        \"field\": \"user\",\r",
 									"        \"message\": \"must exist\"\r",
 									"    }\r",
-									"     var testObj1 = {\r",
+									"\r",
+									"    _.each(jsonData, (item)=>{\r",
+									"        pm.expect(item).to.be.an(\"object\");\r",
+									"        if(item.field === testObj.field && item.message === testObj.message){\r",
+									"            test = true;\r",
+									"        }\r",
+									"    })\r",
+									"\r",
+									"    pm.expect(test).to.be.true;\r",
+									"\r",
+									"});\r",
+									"\r",
+									"pm.test(\"User_id is not a number\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(jsonData).to.be.an(\"array\");\r",
+									"\r",
+									"    var test = false;\r",
+									"\r",
+									"    var testObj = {\r",
 									"        \"field\": \"user_id\",\r",
 									"        \"message\": \"is not a number\"\r",
 									"    }\r",
 									"\r",
-									"\r",
-									"    console.log(typeof(jsonData[0]));\r",
-									"\r",
-									"    pm.expect(testObj).closeTo()\r",
-									"\r",
 									"    _.each(jsonData, (item)=>{\r",
-									"        \r",
-									"    });\r",
+									"        pm.expect(item).to.be.an(\"object\");\r",
+									"        if(item.field === testObj.field && item.message === testObj.message){\r",
+									"            test = true;\r",
+									"        }\r",
+									"    })\r",
 									"\r",
-									"});*/\r",
+									"    pm.expect(test).to.be.true;\r",
 									"\r",
-									"pm.test(\"User does not exist\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    \r",
-									"    pm.expect(jsonData[0].field).to.eql(\"user\");\r",
-									"     pm.expect(jsonData[0].message).to.eql(\"must exist\");\r",
 									"});\r",
 									"\r",
 									""
@@ -332,56 +349,57 @@
 		},
 		{
 			"name": "Delete user",
-			"item": []
-		},
-		{
-			"name": "delete user",
-			"event": [
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 204\", function () {\r",
-							"    pm.response.to.have.status(204);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Response time is less than 250ms\", function () {\r",
-							"    pm.expect(pm.response.responseTime).to.be.below(250);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Responce header tests\", function () {\r",
-							"     //headers\r",
-							"    pm.response.to.have.header(\"Connection\");\r",
-							"    pm.response.to.have.header(\"Cache-control\");\r",
-							"    pm.response.to.have.header(\"Date\");  \r",
-							"\r",
-							"    //header values\r",
-							"    pm.response.to.be.header(\"Connection\", \"keep-alive\");  \r",
-							"    pm.response.to.be.header(\"Cache-Control\", \"no-cache\");   \r",
-							"});\r",
-							"\r",
-							"pm.test(\"Test if response is empty\", function () {\r",
-							"    pm.response.to.not.be.withBody;\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "{{URL}}/{{responseUserID}}",
-					"host": [
-						"{{URL}}"
+					"name": "delete user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 250ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(250);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response header tests\", function () {\r",
+									"     //headers\r",
+									"    pm.response.to.have.header(\"Connection\");\r",
+									"    pm.response.to.have.header(\"Cache-control\");\r",
+									"    pm.response.to.have.header(\"Date\");  \r",
+									"\r",
+									"    //header values\r",
+									"    pm.response.to.be.header(\"Connection\", \"keep-alive\");  \r",
+									"    pm.response.to.be.header(\"Cache-Control\", \"no-cache\");   \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Test if response is empty\", function () {\r",
+									"    pm.response.to.not.be.withBody;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
 					],
-					"path": [
-						"{{responseUserID}}"
-					]
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/{{responseUserID}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"{{responseUserID}}"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	],
 	"auth": {
